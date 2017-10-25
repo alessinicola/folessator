@@ -19,14 +19,14 @@
 	<classpathentry kind="lib" path="apacheJenaLib/jackson-core-2.8.6.jar"/>
 	<classpathentry kind="lib" path="apacheJenaLib/jackson-databind-2.8.6.jar"/>
 	<classpathentry kind="lib" path="apacheJenaLib/jcl-over-slf4j-1.7.25.jar"/>
-	<classpathentry kind="lib" path="apacheJenaLib/jena-arq-3.4.0.jar"/>
-	<classpathentry kind="lib" path="apacheJenaLib/jena-base-3.4.0.jar"/>
-	<classpathentry kind="lib" path="apacheJenaLib/jena-cmds-3.4.0.jar"/>
-	<classpathentry kind="lib" path="apacheJenaLib/jena-core-3.4.0.jar"/>
-	<classpathentry kind="lib" path="apacheJenaLib/jena-iri-3.4.0.jar"/>
-	<classpathentry kind="lib" path="apacheJenaLib/jena-rdfconnection-3.4.0.jar"/>
-	<classpathentry kind="lib" path="apacheJenaLib/jena-shaded-guava-3.4.0.jar"/>
-	<classpathentry kind="lib" path="apacheJenaLib/jena-tdb-3.4.0.jar"/>
+	<classpathentry kind="lib" path="apacheJenaLib/jena-arq-3.4.0.jar" sourcepath="jena-3.4.0/jena-arq"/>
+	<classpathentry kind="lib" path="apacheJenaLib/jena-base-3.4.0.jar" sourcepath="jena-3.4.0/jena-base"/>
+	<classpathentry kind="lib" path="apacheJenaLib/jena-cmds-3.4.0.jar" sourcepath="jena-3.4.0/jena-cmds"/>
+	<classpathentry kind="lib" path="apacheJenaLib/jena-core-3.4.0.jar" sourcepath="jena-3.4.0/jena-core"/>
+	<classpathentry kind="lib" path="apacheJenaLib/jena-iri-3.4.0.jar" sourcepath="jena-3.4.0/jena-iri"/>
+	<classpathentry kind="lib" path="apacheJenaLib/jena-rdfconnection-3.4.0.jar" sourcepath="jena-3.4.0/jena-rdfconnection"/>
+	<classpathentry kind="lib" path="apacheJenaLib/jena-shaded-guava-3.4.0.jar" sourcepath="jena-3.4.0/jena-shaded-guava"/>
+	<classpathentry kind="lib" path="apacheJenaLib/jena-tdb-3.4.0.jar" sourcepath="jena-3.4.0/jena-tdb"/>
 	<classpathentry kind="lib" path="apacheJenaLib/jsonld-java-0.10.0.jar"/>
 	<classpathentry kind="lib" path="apacheJenaLib/libthrift-0.9.3.jar"/>
 	<classpathentry kind="lib" path="apacheJenaLib/log4j-1.2.17.jar"/>
