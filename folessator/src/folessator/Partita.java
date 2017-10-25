@@ -18,13 +18,13 @@ public class Partita {
 	
 	private static Map<Object, Risposta> stato = new HashMap<>();
 	
-	public void add_risposta(Object cluster, Risposta risposta) {
+	public void addRisposta(Object cluster, Risposta risposta) {
 		stato.put(cluster, risposta);
 		}
 	public Risposta getRisposta(Object cluster) {
 		 return stato.get(cluster);
 		 }
-	public void change_risposta(Object cluster, Risposta risposta) {
+	public void changeRisposta(Object cluster, Risposta risposta) {
 		stato.replace(cluster, risposta);
 	}
 	public int numeroDomande() {
