@@ -22,8 +22,6 @@ public class Client {
 		
 		while((serverLine=inFromServer.readUTF()).equals("ok"))
 		{
-			//outToServer.writeUTF("getQuestion");
-			
 			question=inFromServer.readUTF();
 			
 			print(question);
@@ -32,11 +30,8 @@ public class Client {
 			outToServer.writeUTF(answer);
 		}
 		
-		print("server ended with:"+ serverLine);
-		
-				
+		print("server ended with:"+ serverLine);				
 		clientSocket.close();
-
 	}
 	
 	

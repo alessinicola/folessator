@@ -46,9 +46,8 @@ class GameThread implements Runnable {
 		this.clientSocket = clientSocket;		
 		}
 	
-	private String getQuestion() {
-		return "SHIAO BELLO!!";
-	}
+
+	
 	
 
 	public void run() {		
@@ -60,14 +59,22 @@ class GameThread implements Runnable {
 				DataOutputStream outToClient = new DataOutputStream(clientSocket.getOutputStream());
 				DataInputStream inFromClient = new DataInputStream(clientSocket.getInputStream());
 				
+				//TODO: introdurre pattern factory...
+				Partita partita= new PartitaSPARQL();
+				QuestionDatabase database= new QuestionDatabaseITA();
+				//
 				
 				String action;
 				boolean gameover=false;
 				String question;
+				String topic;
 				while(!gameover) 
 					{
 					outToClient.writeUTF("ok");
-					question= getQuestion();
+					
+					topic= partita.getNextTopic();
+					question= database.getQuestion(topic);
+					
 					outToClient.writeUTF(question);					
 					action=inFromClient.readUTF();
 					
