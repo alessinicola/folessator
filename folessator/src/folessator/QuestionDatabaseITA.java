@@ -11,7 +11,7 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 	
 	@Override
 	public String getQuestion(String topic) {
-		return "CIUPPPPPAAAA";
+		return topic;
 	}
 	
 
