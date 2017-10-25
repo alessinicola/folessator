@@ -23,6 +23,7 @@ public class Client {
 		while((serverLine=inFromServer.readUTF()).equals("ok"))
 		{
 			//outToServer.writeUTF("getQuestion");
+			
 			question=inFromServer.readUTF();
 			
 			print(question);
