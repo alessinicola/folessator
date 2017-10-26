@@ -21,7 +21,7 @@ public class PartitaSPARQL implements Partita {
 	public String getNextTopic() {
 		
 		String filters=getFilters();
-		int personCount= getPersonCount(filters);		
+		int personCount= getPersonCount(filters);
 		String topic=getTopic(filters, personCount);
 		
 		return topic;
@@ -36,6 +36,11 @@ public class PartitaSPARQL implements Partita {
 		answers.replace(topic, answer);
 
 		
+	}
+	@Override
+	public boolean isGameOver() {
+		String filters=getFilters();
+		return getPersonCount(filters)==1;
 	}
 	
 	
@@ -193,6 +198,47 @@ public class PartitaSPARQL implements Partita {
 		
 		
 		
+	}
+	
+	@Override
+	public String getGuessedThing() {
+		String filters=getFilters();
+		String queryStr=
+				"select ?URI\n" + 				
+				"where {\n" + 
+				"?URI rdf:type yago:wordnet_person_100007846 .\n" + 
+				filters+
+				"}\n" + 
+				"LIMIT 100";
+		
+		System.out.println("GET_TOPIC:\n"+queryStr);
+
+		
+		
+		Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
+	    try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
+	    	{
+	    		//((QueryEngineHTTP)qexec).addParam("timeout", "1000000") ;
+	            // Execute.
+	            ResultSet rs = qexec.execSelect();
+	            QuerySolution qs ;
+	            String categoria=null;
+	            
+	            //ResultSetFormatter.out(System.out, rs, query);
+	          
+	            qs=rs.next();
+	            categoria=qs.get( "URI" ).toString();            
+	           
+	           
+	            
+	            return categoria;
+	    	}
+	   catch (Exception e) 	
+	    	{
+		   	e.printStackTrace();
+	    	}
+		return null;
+			
 	}
 
 	

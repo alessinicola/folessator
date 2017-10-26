@@ -65,12 +65,13 @@ class GameThread implements Runnable {
 				//
 				
 				String answerStr;
-				boolean gameover=false;
 				String question;
 				String topic;
-				Answer answer;
-				while(!gameover) 
+				String guess;
+				Answer answer= Answer.UNKNOWN;
+				while(!partita.isGameOver() && answer!= Answer.ABORT) 
 					{
+					
 					outToClient.writeUTF("ok");
 					
 					topic= partita.getNextTopic();
@@ -81,14 +82,10 @@ class GameThread implements Runnable {
 					answer=Answer.convert(answerStr);
 					
 					partita.setAnswer(topic, answer);
-					
-					if(answer==Answer.ABORT)
-						{
-						gameover=true;						
-						}
-					
 				}
-				outToClient.writeUTF("finePartita");
+				
+				guess=partita.getGuessedThing();
+				outToClient.writeUTF(guess);
 				
 				outToClient.close();
 				output.close();
