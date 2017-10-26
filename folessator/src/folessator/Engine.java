@@ -64,10 +64,11 @@ class GameThread implements Runnable {
 				QuestionDatabase database= new QuestionDatabaseITA();
 				//
 				
-				String action;
+				String answerStr;
 				boolean gameover=false;
 				String question;
 				String topic;
+				Answer answer;
 				while(!gameover) 
 					{
 					outToClient.writeUTF("ok");
@@ -76,9 +77,12 @@ class GameThread implements Runnable {
 					question= database.getQuestion(topic);
 					
 					outToClient.writeUTF(question);					
-					action=inFromClient.readUTF();
+					answerStr=inFromClient.readUTF();
+					answer=Answer.convert(answerStr);
 					
-					if(action.equals("abort"))
+					partita.setAnswer(topic, answer);
+					
+					if(answer==Answer.ABORT)
 						{
 						gameover=true;						
 						}

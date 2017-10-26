@@ -2,46 +2,38 @@ package folessator;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.query.*;
 
 
 public class PartitaSPARQL implements Partita {
 	
 	
 
-	private static Map<Object, Answer> stato = new HashMap<>();
+	private static Map<String, Answer> answers = new HashMap<>();
 	private static final String serverAddress="https://linkeddata1.calcul.u-psud.fr/sparql";
 	
 		
 	
-	
-	public Answer getRisposta(Object cluster) {
-		 return stato.get(cluster);
-		 }
+
 	
 
 	@Override
 	public String getNextTopic() {
-		int personCount= getPersonCount("");		
-		getAlternatives("", personCount);
 		
-		return "DOMANDA: person Count="+personCount;
+		String filters=getFilters();
+		int personCount= getPersonCount(filters);		
+		String topic=getTopic(filters, personCount);
+		
+		return topic;
 	}
 	@Override
-	public void setAnswer(String topic, Answer answer) {
-		
-		stato.put(topic,answer);
+	public void setAnswer(String topic, Answer answer) {		
+		answers.put(topic,answer);
+		System.out.println("STATO:" + answers);
 	}
 	@Override
 	public void changeAnswer(String topic, Answer answer) {
-		stato.replace(topic, answer);
+		answers.replace(topic, answer);
 
 		
 	}
@@ -98,16 +90,41 @@ public class PartitaSPARQL implements Partita {
 			"	PREFIX yago: <http://yago-knowledge.org/resource/>\n"
 			+ " ";
 
+	
+	private String getFilters() {
+		String result="";
+		
+		for(String key: answers.keySet()) {
+			Answer value=answers.get(key);
+			
+			switch (value) {
+			case NO:
+				result+="FILTER NOT EXISTS { ?URI rdf:type <"+key+"> }\n";
+				break;
+			case YES:
+				result+="FILTER EXISTS { ?URI rdf:type <"+key+"> }\n";
+				break;
+			default:
+				break;			
+			}
+			
+			
+		}
+		
+		return result;
+	}
+	
 	private int getPersonCount(String filters) {
-		String queryStr = QUERY_PREFIX +    		
-					"select (count (distinct ?URI) as ?TOTAL) \n" + 
+		String queryStr =     		
+					"select (count (?URI) as ?TOTAL) \n" + 
 					"where {\n" + 
-					"?URI rdf:type yago:wordnet_person_100007846.\n" + 
-					"?URI rdf:type ?categoria.\n" +
+					"?URI rdf:type yago:wordnet_person_100007846.\n" + 					
 					filters +
 					"\n}\n";
 		
-		Query query = QueryFactory.create(queryStr);
+		System.out.println("GET_PERSON_COUNT:\n"+queryStr);
+		
+		Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
         try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
         	{
         		//((QueryEngineHTTP)qexec).addParam("timeout", "1000000") ;
@@ -124,13 +141,13 @@ public class PartitaSPARQL implements Partita {
 		return 0;
 	}
 	
-	private void getAlternatives(String filters,int TOTAL) {
+	private String getTopic(String filters,int TOTAL) {
 		
 		
 		
-		String queryStr = QUERY_PREFIX +""
+		String queryStr = ""
 				+ "" +
-				"select ?categoria (replace( str(?categoria) , \"^.*/|[0-9]+$\", \"\") as ?TOPIC) (count(?categoria) as ?TOTAL) (abs(count(?categoria)/"+TOTAL+".0 - 0.5) as ?DISTANCE) \n" + 
+				"select ?categoria (count(?categoria) as ?TOTAL) (abs(count(?categoria)/"+TOTAL+".0 - 0.5) as ?DISTANCE) \n" + 
 				"\n" + 
 				"where {\n" + 
 				"?URI rdf:type yago:wordnet_person_100007846 .\n" + 
@@ -144,26 +161,41 @@ public class PartitaSPARQL implements Partita {
 				"\n" + 
 				"LIMIT 100"
 				+ "";
+		System.out.println("GET_TOPIC:\n"+queryStr);
+
 	
-	Query query = QueryFactory.create(queryStr);
+		
+	Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
     try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
     	{
     		//((QueryEngineHTTP)qexec).addParam("timeout", "1000000") ;
             // Execute.
             ResultSet rs = qexec.execSelect();
-            //QuerySolution qs = rs.next();
-            ResultSetFormatter.out(System.out, rs, query);
-           // return qs.get( "TOTAL" ).asLiteral().getInt();
+            QuerySolution qs ;
+            String categoria=null;
+            Answer answer=Answer.MAYBE;
+            //ResultSetFormatter.out(System.out, rs, query);
+          
+            while(answer==Answer.MAYBE)
+            {
+            qs=rs.next();
+            categoria=qs.get( "categoria" ).toString();            
+            answer=answers.get(categoria);
+            }
+            
+            return categoria;
     	}
    catch (Exception e) 	
     	{
 	   	e.printStackTrace();
     	}
+	return null;
 		
 		
 		
 	}
 
+	
 	
 	
 }

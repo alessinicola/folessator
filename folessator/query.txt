@@ -1,9 +1,9 @@
 #query che conta tutte le persone...
 
-select (count (distinct ?URI) as ?TOTAL) 
-where {
+select (count (?URI) as ?TOTAL)
+where
+{
 ?URI rdf:type yago:wordnet_person_100007846.
-?URI rdf:type ?categoria.
 }
 
 ########

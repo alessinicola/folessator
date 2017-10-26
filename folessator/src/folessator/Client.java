@@ -45,7 +45,7 @@ public class Client {
 		while((result=inFromUser.readLine())==null ||
 							  !(result.equalsIgnoreCase("yes") ||
 								result.equalsIgnoreCase("no")  ||
-								result.equalsIgnoreCase("idk") ||
+								result.equalsIgnoreCase("maybe") ||
 								result.equalsIgnoreCase("abort") 								
 								));
 		

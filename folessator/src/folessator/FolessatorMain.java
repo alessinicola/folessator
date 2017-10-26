@@ -50,7 +50,7 @@ public class FolessatorMain {
           
           System.out.println(rs.hasNext());
             
-          
+         
           
           while ( rs.hasNext() ) {
               final QuerySolution qs = rs.next();
