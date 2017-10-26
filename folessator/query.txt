@@ -1,0 +1,30 @@
+#query che conta tutte le persone...
+
+select (count (distinct ?URI) as ?TOTAL) 
+where {
+?URI rdf:type yago:wordnet_person_100007846.
+?URI rdf:type ?categoria.
+}
+
+########
+#FILTRI
+########
+
+}
+
+#query per algoritmo...
+
+select ?categoria (replace( str(?categoria) , "^.*/|[0-9]+$", "") as ?TOPIC) (count(?categoria) as ?TOTAL) (abs(count(?categoria)/1745219.0 - 0.5) as ?DISTANCE)
+where {
+?URI rdf:type yago:wordnet_person_100007846 .
+?URI rdf:type ?categoria .
+
+########
+#FILTRI
+########
+
+}
+GROUP BY ?categoria
+HAVING (count(?categoria) < 1745219)
+ORDER BY (?DISTANCE)				
+LIMIT 100

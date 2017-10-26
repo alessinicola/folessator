@@ -7,24 +7,24 @@ public class FolessatorMain {
 	
 	private static final String server="https://linkeddata1.calcul.u-psud.fr/sparql";
     static public void main(String...argv) {
-        String queryStr = QUERY_PREFIX+
-        		"select ?categoria (replace( str(?categoria) , \"^.*/|[0-9]+$\", \"\") as ?TOPIC) (count(?categoria) as ?TOTAL) (abs(count(?categoria)/1243399.0 - 0.5) as ?DISTANCE) \n" + 
-        		"\n" + 
-        		"where {\n" + 
-        		"?URI rdf:type yago:wordnet_person_100007846.\n" + 
-        		"?URI rdf:type ?categoria.\n" + 
-        		"\n" + 
-        		"\n" + 
-        		"\n" + 
-        		"}\n" + 
-        		"GROUP BY ?categoria\n" + 
-        		"ORDER BY (?DISTANCE)\n" + 
-        		"#ORDER BY DESC (?TOTAL)\n" + 
-        		"\n" + 
-        		"\n" + 
-        		"LIMIT 100";
+    	String queryStr = QUERY_PREFIX +""
+				+ "" +
+				"select ?categoria (replace( str(?categoria) , \"^.*/|[0-9]+$\", \"\") as ?TOPIC) (count(?categoria) as ?TOTAL) (abs(count(?categoria)/1745219.0 - 0.5) as ?DISTANCE) \n" + 
+				"\n" + 
+				"where {\n" + 
+				"?URI rdf:type yago:wordnet_person_100007846 .\n" + 
+				"?URI rdf:type ?categoria .\n" + 
+				 
+				"}\n" + 
+				"GROUP BY ?categoria\n"+
+				"HAVING (count(?categoria) < 1745219 )\n" + 
+				"ORDER BY (?DISTANCE)\n" + 				
+				"\n" + 
+				"\n" + 
+				"LIMIT 100"
+				+ "";
         
-        
+        /*
         
         queryStr = QUERY_PREFIX+			
 				"select (count (distinct ?URI) as ?TOTAL) \n" + 
@@ -33,7 +33,7 @@ public class FolessatorMain {
 				"?URI rdf:type yago:wordnet_person_100007846.\n" + 
 				"?URI rdf:type ?categoria\n" + 
 				"}\n";
-        
+        */
         Query query = QueryFactory.create(queryStr);
         // Remote execution.
         try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(server, query) ) {

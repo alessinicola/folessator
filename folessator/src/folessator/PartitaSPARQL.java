@@ -29,11 +29,10 @@ public class PartitaSPARQL implements Partita {
 
 	@Override
 	public String getNextTopic() {
-		int personCount= getPersonCount("");
-		
+		int personCount= getPersonCount("");		
 		getAlternatives("", personCount);
 		
-		return "SCIAOBELLO! person Count="+personCount;
+		return "DOMANDA: person Count="+personCount;
 	}
 	@Override
 	public void setAnswer(String topic, Answer answer) {
@@ -138,9 +137,9 @@ public class PartitaSPARQL implements Partita {
 				"?URI rdf:type ?categoria .\n" + 
 				filters + 
 				"}\n" + 
-				"GROUP BY ?categoria\n" + 
-				"ORDER BY (?DISTANCE)\n" + 
-				"#ORDER BY DESC (?TOTAL)\n" + 
+				"GROUP BY ?categoria\n"+
+				"HAVING (count(?categoria) < "+TOTAL+")\n" + 
+				"ORDER BY (?DISTANCE)\n" + 				
 				"\n" + 
 				"\n" + 
 				"LIMIT 100"
