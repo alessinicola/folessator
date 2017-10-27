@@ -30,7 +30,7 @@ public class Client {
 			outToServer.writeUTF(answer);
 		}
 		
-		print("FOLESSATOR guess:\n"+ serverLine);				
+		print(serverLine);				
 		clientSocket.close();
 	}
 	

@@ -1,47 +1,110 @@
 package folessator;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import org.apache.jena.query.*;
 
 
 public class PartitaSPARQL implements Partita {
 	
-	
 
-	private Map<String, Answer> answers = new HashMap<>();
+	private Map<String, Answer> answers = new LinkedHashMap<>();
 	private static final String serverAddress="https://linkeddata1.calcul.u-psud.fr/sparql";
 	
 		
-	
-
-	
 
 	@Override
-	public String getNextTopic() {
+	public String getNextTopic() {	
 		
 		String filters=getFilters();
 		int personCount= getPersonCount(filters);
-		String topic=getTopic(filters, personCount);
+		String topic=null;
 		
+		if(personCount!=1) //don't have a guess			
+			topic=getTopic(filters, personCount);			
+		else
+			{
+			topic="GUESS="+getGuess();
+			
+			//ultimo SI...
+			String lastYesAnswer=null;
+			for(String key: answers.keySet())
+				{
+				Answer value=answers.get(key);
+				if(value==Answer.YES)
+					lastYesAnswer=key;
+				}
+			answers= new LinkedHashMap<>();
+			
+			if(lastYesAnswer != null)			
+				answers.put(lastYesAnswer, Answer.YES);
+			
+			
+			/*
+			 * sembra funzionare bene..
+			String lastYesAnswer=null;
+			for(String key: answers.keySet())
+				{
+				Answer value=answers.get(key);
+				if(value==Answer.YES)
+					lastYesAnswer=key;
+				}			
+			
+			
+			ArrayList<String> keys= new ArrayList<String>(answers.keySet());
+			int index=0;
+			while( answers.size() > 5 )
+				{
+				answers.remove(keys.get(index++));
+				}
+			
+			if(lastYesAnswer != null)			
+				answers.put(lastYesAnswer, Answer.YES);
+			
+			*/
+			
+			
+			/*
+			ArrayList<String> keys= new ArrayList<String>(answers.keySet());
+			keys= new ArrayList<String>(answers.keySet());
+			Comparator<String> cmp = Collections.reverseOrder();  
+ 		    Collections.sort(keys, cmp);  
+ 			Map<String, Answer> answersTMP = new LinkedHashMap<>();
+*/
+ 		   /* 
+			String lastYesAnswer=null;
+			for(String key: answers.keySet())
+				{
+				Answer value=answers.get(key);
+				if(value==Answer.YES)
+					lastYesAnswer=key;
+				}			
+			
+			
+			ArrayList<String> keys= new ArrayList<String>(answers.keySet());
+			int index=0;
+			while( answers.size() > 5 )
+				{
+				answers.remove(keys.get(index++));
+				}
+			
+			if(lastYesAnswer != null)			
+				answers.put(lastYesAnswer, Answer.YES);
+			*/
+			
+		}
 		return topic;
 	}
 	@Override
 	public void setAnswer(String topic, Answer answer) {		
-		answers.put(topic,answer);
+		answers.put(topic,answer);	
+		
 		System.out.println("STATO:" + answers);
 	}
-	@Override
-	public void changeAnswer(String topic, Answer answer) {
-		answers.replace(topic, answer);
-
-		
-	}
-	@Override
-	public boolean isGameOver() {
+	/*@Override
+	public boolean haveGuess() {
 		String filters=getFilters();
 		return getPersonCount(filters)==1;
-	}
+	}*/
 	
 	
 	
@@ -102,6 +165,9 @@ public class PartitaSPARQL implements Partita {
 		for(String key: answers.keySet()) {
 			Answer value=answers.get(key);
 			
+			if(key.contains("GUESS")) 
+				continue;
+			
 			switch (value) {
 			case NO:
 				result+="FILTER NOT EXISTS { ?URI rdf:type <"+key+"> }\n";
@@ -146,9 +212,7 @@ public class PartitaSPARQL implements Partita {
 		return 0;
 	}
 	
-	private String getTopic(String filters,int TOTAL) {
-		
-		
+	private String getTopic(String filters,int TOTAL) {		
 		
 		String queryStr = ""
 				+ "" +
@@ -179,7 +243,8 @@ public class PartitaSPARQL implements Partita {
             String categoria=null;
             Answer answer=Answer.MAYBE;
             //ResultSetFormatter.out(System.out, rs, query);
-          
+         
+            //while(answer==Answer.MAYBE || allAnswers.containsKey(categoria))
             while(answer==Answer.MAYBE)
             {
             qs=rs.next();
@@ -200,7 +265,7 @@ public class PartitaSPARQL implements Partita {
 	}
 	
 	@Override
-	public String getGuessedThing() {
+	public String getGuess() {
 		String filters=getFilters();
 		String queryStr=
 				"select ?URI\n" + 				
