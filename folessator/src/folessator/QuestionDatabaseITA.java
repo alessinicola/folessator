@@ -2,7 +2,6 @@ package folessator;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Set;
 
 public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 
