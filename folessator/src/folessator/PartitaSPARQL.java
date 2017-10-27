@@ -153,7 +153,6 @@ public class PartitaSPARQL implements Partita {
 		String queryStr = ""
 				+ "" +
 				"select ?categoria (count(?categoria) as ?TOTAL) (abs(count(?categoria)/"+TOTAL+".0 - 0.5) as ?DISTANCE) \n" + 
-				"\n" + 
 				"where {\n" + 
 				"?URI rdf:type yago:wordnet_person_100007846 .\n" + 
 				"?URI rdf:type ?categoria .\n" + 
