@@ -9,7 +9,7 @@ public class PartitaSPARQL implements Partita {
 	
 	
 
-	private static Map<String, Answer> answers = new HashMap<>();
+	private Map<String, Answer> answers = new HashMap<>();
 	private static final String serverAddress="https://linkeddata1.calcul.u-psud.fr/sparql";
 	
 		
