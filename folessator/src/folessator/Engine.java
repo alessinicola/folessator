@@ -65,28 +65,31 @@ class GameThread implements Runnable {
 				//
 				
 				String answerStr;
-				String question;
-				String topic;
-				String guess;
+				String question = null;
+				String topic = "";
+				
 				Answer answer= Answer.UNKNOWN;
-				while(!partita.isGameOver() && answer!= Answer.ABORT) 
+				while(  (answer!= Answer.ABORT && !topic.contains("GUESS")) || 
+						(topic.contains("GUESS") && answer== Answer.NO) ) 
 					{
 					
 					outToClient.writeUTF("ok");
 					
 					topic= partita.getNextTopic();
-					question= database.getQuestion(topic);
+					question= database.getQuestion(topic);						
 					
 					outToClient.writeUTF(question);					
 					answerStr=inFromClient.readUTF();
 					answer=Answer.convert(answerStr);
 					
 					partita.setAnswer(topic, answer);
-				}
+					}
 				
-				guess=partita.getGuessedThing();
-				outToClient.writeUTF(guess);
+				outToClient.writeUTF("gameover");
 				
+				
+				
+				System.out.println("closing thread...");
 				outToClient.close();
 				output.close();
 				input.close();

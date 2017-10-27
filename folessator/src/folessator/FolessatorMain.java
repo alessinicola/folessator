@@ -1,6 +1,6 @@
 package folessator;
 
-import org.apache.jena.query.*;
+//import org.apache.jena.query.*;
 
 public class FolessatorMain {
 	
@@ -31,7 +31,7 @@ public class FolessatorMain {
     partita.setAnswer("http://yago-knowledge.org/resource/wordnet_journalist_110224578", Answer.NO);
     /**/
     
-    topic=partita.getGuessedThing();
+    topic=partita.getGuess();
     
     System.out.println("topic:"+ topic);
     
