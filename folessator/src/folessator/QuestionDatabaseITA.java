@@ -74,14 +74,11 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 	
 	@Override
 	public  String getQuestion(String topic) {
-<<<<<<< HEAD
+
 		if (questionMap.containsKey(topic))
 		return questionMap.get(topic);
 		else return getTag(topic);
-=======
-		//return questionMap.get(topic);
-		return topic+" QUESTIONDB";
->>>>>>> refs/remotes/origin/master
+
 	}
 	
 	private String getTag(String topic) {
