@@ -70,8 +70,8 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 		if (questionMap.containsKey(topic))
 			return questionMap.get(topic);
 		
-		//if ((label=getLabel(topic))!=null)
-			//return label;
+		if ((label=getLabel(topic))!=null)
+			return label;
 		
 		return getTag(topic);
 	}
@@ -103,23 +103,29 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 				+ "}";
 		System.out.println(queryForLabel);
 		Query query = QueryFactory.create(QUERY_PREFIX+queryForLabel);
-		QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query);
-		ResultSet rs = qexec.execSelect();
-		//ResultSetFormatter.out(System.out, rs);
-		
-		List<String> queryResults=new ArrayList<String>();
-		while (rs.hasNext()) {
-			QuerySolution soln = rs.nextSolution();
-            String label=soln.get( "LABEL" ).toString().replaceAll("@ita$", "");            
-			queryResults.add(label);
-            System.out.println(label);
-		}
-		
-		if(queryResults.size()>=1)
-			result=queryResults.get(0);
-		if(queryResults.size()>=2)
-			result=result+" o " + queryResults.get(1);
-		
+				
+        try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
+        	{
+        		ResultSet rs = qexec.execSelect();
+	            QuerySolution qs = rs.next();
+	            List<String> queryResults=new ArrayList<String>();
+	    		while (rs.hasNext()) {
+	    			QuerySolution soln = rs.nextSolution();
+	                String label=soln.get( "LABEL" ).toString().replaceAll("@ita$", "");            
+	    			queryResults.add(label);
+	                System.out.println(label);
+	    		}
+	    		
+	    		if(queryResults.size()>=1)
+	    			result=queryResults.get(0);
+	    		if(queryResults.size()>=2)
+	    			result=result+" o " + queryResults.get(1);	            
+	            
+        	}
+	   catch (Exception e) 	
+        	{
+		   	e.printStackTrace();
+        	}		
 		
 		return result;
 	}
