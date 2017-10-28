@@ -10,86 +10,34 @@ public class PartitaSPARQL implements Partita {
 	private Map<String, Answer> answers = new LinkedHashMap<>();
 	private static final String serverAddress="https://linkeddata1.calcul.u-psud.fr/sparql";
 	
-		
-
 	@Override
 	public String getNextTopic() {	
 		
-		String filters=getFilters();
-		int personCount= getPersonCount(filters);
+		int personCount= getPersonCount();
 		String topic=null;
 		
-		if(personCount!=1) //don't have a guess			
-			topic=getTopic(filters, personCount);			
+		if(personCount!=1) //don't have a guess, getting next topic			
+			topic=getNextTopic(personCount);			
 		else
 			{
-			topic="GUESS="+getGuess();
+			topic="GUESS="+getGuess();		
 			
-			//ultimo SI...
-			String lastYesAnswer=null;
-			for(String key: answers.keySet())
-				{
-				Answer value=answers.get(key);
-				if(value==Answer.YES)
-					lastYesAnswer=key;
+			/* 
+			 * nel caso in cui abbia sbagliato persona
+			 * considera solo le risposte migliori e riparte
+			 * con l'algoritmo 
+			 * */
+			String filter=getINFilters();			
+			List<String> orderedRelevantAnswers=getRelevantAnswers(filter);
+			answers = new LinkedHashMap<>();
+			
+		
+			int keep=3;
+			for(int i=0;i<keep && i<orderedRelevantAnswers.size();i++) 
+				{				
+				String answerStr=orderedRelevantAnswers.get(i);
+				answers.put(answerStr, Answer.YES);
 				}
-			answers= new LinkedHashMap<>();
-			
-			if(lastYesAnswer != null)			
-				answers.put(lastYesAnswer, Answer.YES);
-			
-			
-			/*
-			 * sembra funzionare bene..
-			String lastYesAnswer=null;
-			for(String key: answers.keySet())
-				{
-				Answer value=answers.get(key);
-				if(value==Answer.YES)
-					lastYesAnswer=key;
-				}			
-			
-			
-			ArrayList<String> keys= new ArrayList<String>(answers.keySet());
-			int index=0;
-			while( answers.size() > 5 )
-				{
-				answers.remove(keys.get(index++));
-				}
-			
-			if(lastYesAnswer != null)			
-				answers.put(lastYesAnswer, Answer.YES);
-			
-			*/
-			
-			
-			/*
-			ArrayList<String> keys= new ArrayList<String>(answers.keySet());
-			keys= new ArrayList<String>(answers.keySet());
-			Comparator<String> cmp = Collections.reverseOrder();  
- 		    Collections.sort(keys, cmp);  
- 			Map<String, Answer> answersTMP = new LinkedHashMap<>();
-*/
- 		   /* 
-			String lastYesAnswer=null;
-			for(String key: answers.keySet())
-				{
-				Answer value=answers.get(key);
-				if(value==Answer.YES)
-					lastYesAnswer=key;
-				}			
-			
-			
-			ArrayList<String> keys= new ArrayList<String>(answers.keySet());
-			int index=0;
-			while( answers.size() > 5 )
-				{
-				answers.remove(keys.get(index++));
-				}
-			
-			if(lastYesAnswer != null)			
-				answers.put(lastYesAnswer, Answer.YES);
-			*/
 			
 		}
 		return topic;
@@ -97,17 +45,8 @@ public class PartitaSPARQL implements Partita {
 	@Override
 	public void setAnswer(String topic, Answer answer) {		
 		answers.put(topic,answer);	
+		}
 		
-		System.out.println("STATO:" + answers);
-	}
-	/*@Override
-	public boolean haveGuess() {
-		String filters=getFilters();
-		return getPersonCount(filters)==1;
-	}*/
-	
-	
-	
 	/*SPARQL QUERIES*/
 	private static final String QUERY_PREFIX=""+
 			"	PREFIX bif: <bif:>\n" + 
@@ -157,9 +96,9 @@ public class PartitaSPARQL implements Partita {
 			"	PREFIX xslwd: <http://www.w3.org/TR/WD-xsl>\n" + 
 			"	PREFIX yago: <http://yago-knowledge.org/resource/>\n"
 			+ " ";
-
 	
-	private String getFilters() {
+	/*FILTERS*/
+	private String getEXISTFilters() {
 		String result="";
 		
 		for(String key: answers.keySet()) {
@@ -183,18 +122,40 @@ public class PartitaSPARQL implements Partita {
 		}
 		
 		return result;
+	}	
+	private String getINFilters(){
+		String filter="FILTER ( ?categoria IN ( ";
+		boolean found=false;
+		for(String key: answers.keySet())
+		{
+		Answer value=answers.get(key);
+		if(value==Answer.YES)
+			{
+			if(!filter.equals("FILTER ( ?categoria IN ( ")){
+				filter+=",";
+			}
+			filter+="<"+key+">";
+			found=true;
+			}
+		}
+		if(found)
+			filter +="))\n";
+		else
+			filter= "";
+		
+		return filter;
 	}
 	
-	private int getPersonCount(String filters) {
+	private int getPersonCount() {
+		
+		String filters=getEXISTFilters();
 		String queryStr =     		
 					"select (count (?URI) as ?TOTAL) \n" + 
 					"where {\n" + 
 					"?URI rdf:type yago:wordnet_person_100007846.\n" + 					
 					filters +
 					"\n}\n";
-		
-		System.out.println("GET_PERSON_COUNT:\n"+queryStr);
-		
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName()+queryStr);		
 		Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
         try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
         	{
@@ -207,15 +168,13 @@ public class PartitaSPARQL implements Partita {
 	   catch (Exception e) 	
         	{
 		   	e.printStackTrace();
-        	}
-		
-		return 0;
+        	}		
+		return 0;		
 	}
-	
-	private String getTopic(String filters,int TOTAL) {		
+	private String getNextTopic(int TOTAL) {
 		
-		String queryStr = ""
-				+ "" +
+		String filters=getEXISTFilters();
+		String queryStr = ""+				
 				"select ?categoria (count(?categoria) as ?TOTAL) (abs(count(?categoria)/"+TOTAL+".0 - 0.5) as ?DISTANCE) \n" + 
 				"where {\n" + 
 				"?URI rdf:type yago:wordnet_person_100007846 .\n" + 
@@ -227,24 +186,17 @@ public class PartitaSPARQL implements Partita {
 				"ORDER BY (?DISTANCE)\n" + 				
 				"\n" + 
 				"\n" + 
-				"LIMIT 100"
-				+ "";
-		System.out.println("GET_TOPIC:\n"+queryStr);
-
-	
-		
+				"LIMIT 100";
+	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName()+queryStr);			
 	Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
     try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
-    	{
-    		//((QueryEngineHTTP)qexec).addParam("timeout", "1000000") ;
-            // Execute.
+    	{    		
             ResultSet rs = qexec.execSelect();
             QuerySolution qs ;
             String categoria=null;
             Answer answer=Answer.MAYBE;
-            //ResultSetFormatter.out(System.out, rs, query);
-         
-            //while(answer==Answer.MAYBE || allAnswers.containsKey(categoria))
+            //ResultSetFormatter.out(System.out, rs, query);         
+          
             while(answer==Answer.MAYBE)
             {
             qs=rs.next();
@@ -258,15 +210,11 @@ public class PartitaSPARQL implements Partita {
     	{
 	   	e.printStackTrace();
     	}
-	return null;
-		
-		
-		
+	return null;		
 	}
-	
 	@Override
 	public String getGuess() {
-		String filters=getFilters();
+		String filters=getEXISTFilters();
 		String queryStr=
 				"select ?URI\n" + 				
 				"where {\n" + 
@@ -275,9 +223,7 @@ public class PartitaSPARQL implements Partita {
 				"}\n" + 
 				"LIMIT 100";
 		
-		System.out.println("GET_TOPIC:\n"+queryStr);
-
-		
+		 System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName()+queryStr);
 		
 		Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
 	    try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
@@ -304,8 +250,41 @@ public class PartitaSPARQL implements Partita {
 		return null;
 			
 	}
-
+	private List<String> getRelevantAnswers(String filters) {
 	
+	List<String> result= new ArrayList<String>();	
+	String queryStr = ""+
+			"select ?categoria (count(?URI) as ?TOTAL)\n" + 
+			"where {\n" + 
+			"?URI rdf:type ?categoria.\n" + 
+			filters+
+			"}\n" + 
+			"GROUP BY ?categoria\n" + 
+			"ORDER BY ( ?TOTAL )"
+			+ "";    		
+			
 	
+	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName()+queryStr);
+	
+	Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
+    try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
+    	{
+    		ResultSet rs = qexec.execSelect();          
+           
+            while(rs.hasNext()) {
+            	 QuerySolution qs = rs.next();
+                 String categoria=qs.get( "categoria" ).toString(); 
+                 result.add(categoria);
+            }
+            
+            return result;
+    	}
+   catch (Exception e) 	
+    	{
+	   	e.printStackTrace();
+    	}
+	
+	return null;
+	}
 	
 }
