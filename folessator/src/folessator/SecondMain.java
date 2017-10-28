@@ -63,8 +63,8 @@ public class SecondMain {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	
-	db.stampa();		
+	db.getLabel("http://yago-knowledge.org/resource/wordnet_defender_109614684");
+	//db.stampa();	
 }
 	
 }
