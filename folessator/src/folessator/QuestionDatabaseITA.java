@@ -11,7 +11,8 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 	
 	@Override
 	public  String getQuestion(String topic) {
-		return questionMap.get(topic);
+		//return questionMap.get(topic);
+		return topic+" QUESTIONDB";
 	}
 	
 	public void stampa() {
