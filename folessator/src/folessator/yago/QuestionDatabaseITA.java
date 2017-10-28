@@ -96,7 +96,7 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 	public String getLabel(String topic) {
 		String result=null;
 		String queryForLabel = "" + 
-		"select ?LABEL "
+		"select distinct ?LABEL "
 				+"{ "
 				+"<"+ topic +"> ?a ?LABEL ."
 				+"FILTER (lang(?LABEL) = 'ita')"
@@ -107,7 +107,7 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
         try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
         	{
         		ResultSet rs = qexec.execSelect();
-	            QuerySolution qs = rs.next();
+	            
 	            List<String> queryResults=new ArrayList<String>();
 	    		while (rs.hasNext()) {
 	    			QuerySolution soln = rs.nextSolution();
