@@ -70,8 +70,8 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 		if (questionMap.containsKey(topic))
 			return questionMap.get(topic);
 		
-		if ((label=getLabel(topic))!=null)
-			return label;
+		//if ((label=getLabel(topic))!=null)
+			//return label;
 		
 		return getTag(topic);
 	}
