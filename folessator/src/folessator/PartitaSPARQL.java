@@ -155,7 +155,7 @@ public class PartitaSPARQL implements Partita {
 					"?URI rdf:type yago:wordnet_person_100007846.\n" + 					
 					filters +
 					"\n}\n";
-		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());		
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName()+queryStr);		
 		Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
         try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
         	{
@@ -187,7 +187,7 @@ public class PartitaSPARQL implements Partita {
 				"\n" + 
 				"\n" + 
 				"LIMIT 100";
-	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());			
+	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName()+queryStr);			
 	Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
     try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
     	{    		
@@ -223,7 +223,7 @@ public class PartitaSPARQL implements Partita {
 				"}\n" + 
 				"LIMIT 100";
 		
-		 System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+		 System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName()+queryStr);
 		
 		Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
 	    try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )
@@ -264,7 +264,7 @@ public class PartitaSPARQL implements Partita {
 			+ "";    		
 			
 	
-	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName()+queryStr);
 	
 	Query query = QueryFactory.create(QUERY_PREFIX+queryStr);
     try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query) )

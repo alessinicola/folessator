@@ -10,25 +10,28 @@ import java.io.OutputStream;
 
 public class Engine {
 
-	private static int serverPort = 6789;
+	private static int serverPort = 5829;
 	private static ServerSocket serverSocket = null;
 
 	public static void main(String[] args) throws IOException {
 
 		serverSocket = new ServerSocket(serverPort);
 
-		while (true) {
-			try {
-				Socket clientSocket = null;
-				clientSocket = serverSocket.accept();
-				new Thread(new GameThread(clientSocket)).start();
-				}
-			catch (IOException e) 
+		while (true) 
 			{
-				break;
+				try 
+				{
+					Socket clientSocket = null;
+					clientSocket = serverSocket.accept();
+					new Thread(new GameThread(clientSocket)).start();
+				}
+				catch (IOException e) 
+				{
+					e.printStackTrace();
+					break;
+				}
+	
 			}
-
-		}
 		System.out.println("Server Stopped.");
 	}
 
@@ -46,10 +49,6 @@ class GameThread implements Runnable {
 		this.clientSocket = clientSocket;		
 		}
 	
-
-	
-	
-
 	public void run() {		
 		System.out.println("CREATO THREAD");		
 			try {
@@ -71,9 +70,8 @@ class GameThread implements Runnable {
 				Answer answer= Answer.UNKNOWN;
 				while(  (answer!= Answer.ABORT && !topic.contains("GUESS")) || 
 						(topic.contains("GUESS") && answer== Answer.NO) ) 
-					{
-					
-					outToClient.writeUTF("ok");
+					{					
+					outToClient.writeBoolean(true);
 					
 					topic= partita.getNextTopic();
 					question= database.getQuestion(topic);						
@@ -84,21 +82,17 @@ class GameThread implements Runnable {
 					
 					partita.setAnswer(topic, answer);
 					}
-				
+				outToClient.writeBoolean(false);
 				outToClient.writeUTF("gameover");
-				
-				
-				
-				System.out.println("closing thread...");
 				outToClient.close();
 				output.close();
-				input.close();
-				
+				input.close();				
 				} 
 			catch (IOException e) 
 				{
 				// report exception somewhere.
 				e.printStackTrace();
 				}
+			System.out.println("closing thread...");
 	}
 }

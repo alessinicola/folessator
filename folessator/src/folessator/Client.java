@@ -9,18 +9,16 @@ public class Client {
 	
 	static public void main(String[] args) throws UnknownHostException, IOException {
 		
-		
-		Socket clientSocket = new Socket("localhost", 6789);
+		//porta 5829: "lucy" in T9
+		Socket clientSocket = new Socket("localhost", 5829);
 		DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-		//BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());
-
 		
 		String serverLine;
 		String question;
 		String answer;
 		
-		while((serverLine=inFromServer.readUTF()).equals("ok"))
+		while(inFromServer.readBoolean())
 		{
 			question=inFromServer.readUTF();
 			
@@ -29,7 +27,7 @@ public class Client {
 			
 			outToServer.writeUTF(answer);
 		}
-		
+		serverLine=inFromServer.readUTF();
 		print(serverLine);				
 		clientSocket.close();
 	}

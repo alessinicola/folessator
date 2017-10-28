@@ -1,4 +1,4 @@
-package folessator;
+package test;
 
 import java.util.*;
 
@@ -8,6 +8,10 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+
+import folessator.Answer;
+import folessator.Partita;
+import folessator.PartitaSPARQL;
 
 //import org.apache.jena.query.*;
 
