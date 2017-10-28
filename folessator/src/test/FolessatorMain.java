@@ -11,7 +11,7 @@ import org.apache.jena.query.ResultSet;
 
 import folessator.Answer;
 import folessator.Partita;
-import folessator.PartitaSPARQL;
+import folessator.yago.PartitaSPARQL;
 
 //import org.apache.jena.query.*;
 

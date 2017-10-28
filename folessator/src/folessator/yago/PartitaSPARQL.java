@@ -1,7 +1,10 @@
-package folessator;
+package folessator.yago;
 
 import java.util.*;
 import org.apache.jena.query.*;
+
+import folessator.Answer;
+import folessator.Partita;
 
 
 public class PartitaSPARQL implements Partita {

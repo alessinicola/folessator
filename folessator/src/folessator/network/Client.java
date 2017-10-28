@@ -1,4 +1,4 @@
-package folessator;
+package folessator.network;
 
 import java.io.*;
 import java.net.*;

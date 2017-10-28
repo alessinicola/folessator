@@ -1,4 +1,4 @@
-package folessator;
+package test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.Scanner;
+
+import folessator.yago.QuestionDatabaseITA;
 
 public class SecondMain {
 	

@@ -1,4 +1,4 @@
-package folessator;
+package folessator.yago;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -14,6 +14,8 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.RDFNode;
+
+import folessator.QuestionDatabase;
 
 public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 	
@@ -82,11 +84,17 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 	}
 	
 	private String getTag(String topic) {
-		String result=topic.replaceAll("^.*\\/|[0-9]+$","");
+		String result=topic;
+		boolean haveGuess= topic.startsWith("GUESS");
+		
+		result=result.replaceAll("^.*\\/|[0-9]+$","");
 		result=result.replaceAll("wordnet_", "");
 		result=result.replaceAll("wikicat_", "");
 		result=result.replaceAll("_", " ");
 		result=result.trim();
+		
+		if(haveGuess)
+			result="Ho capito! Stai parlando di "+result+"?";
 		return result;
 	}
 	

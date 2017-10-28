@@ -1,7 +1,14 @@
-package folessator;
+package folessator.network;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import folessator.Answer;
+import folessator.Partita;
+import folessator.QuestionDatabase;
+import folessator.yago.PartitaSPARQL;
+import folessator.yago.QuestionDatabaseITA;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
