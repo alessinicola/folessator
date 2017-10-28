@@ -1,19 +1,8 @@
 package folessator.yago;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
-import org.apache.jena.rdf.model.RDFNode;
+import java.util.*;
+import org.apache.jena.query.*;
 
 import folessator.QuestionDatabase;
 
@@ -77,10 +66,14 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 	@Override
 	public  String getQuestion(String topic) {
 
+		String label;
 		if (questionMap.containsKey(topic))
-		return questionMap.get(topic);
-		else return getTag(topic);
-
+			return questionMap.get(topic);
+		
+		if ((label=getLabel(topic))!=null)
+			return label;
+		
+		return getTag(topic);
 	}
 	
 	private String getTag(String topic) {
@@ -95,15 +88,16 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 		
 		if(haveGuess)
 			result="Ho capito! Stai parlando di "+result+"?";
+		
+		System.out.println("result" + result +" topic" +topic);
 		return result;
 	}
 	
 	public String getLabel(String topic) {
-		//String filter = topic.replaceAll("^.*\\/|[0-9]+\\\\$",""); //costruttore query per tag funziona
+		String result=null;
 		String queryForLabel = "" + 
 		"select ?LABEL "
 				+"{ "
-				//+"yago:"+ filter +" ?a ?b "
 				+"<"+ topic +"> ?a ?LABEL ."
 				+"FILTER (lang(?LABEL) = 'ita')"
 				+ "}";
@@ -112,16 +106,22 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(serverAddress, query);
 		ResultSet rs = qexec.execSelect();
 		//ResultSetFormatter.out(System.out, rs);
+		
+		List<String> queryResults=new ArrayList<String>();
 		while (rs.hasNext()) {
 			QuerySolution soln = rs.nextSolution();
             String label=soln.get( "LABEL" ).toString().replaceAll("@ita$", "");            
-
-			//RDFNode x = soln.get("x");
-			System.out.println(label);
+			queryResults.add(label);
+            System.out.println(label);
 		}
-		System.out.println("arrivo qua");
 		
-		return "";
+		if(queryResults.size()>=1)
+			result=queryResults.get(0);
+		if(queryResults.size()>=2)
+			result=result+" o " + queryResults.get(1);
+		
+		
+		return result;
 	}
 
 	public void stampa() {
