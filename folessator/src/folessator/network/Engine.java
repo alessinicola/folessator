@@ -67,7 +67,7 @@ class GameThread implements Runnable {
 				
 				//TODO: introdurre pattern factory...
 				Partita partita= new PartitaSPARQL();
-				QuestionDatabase database= new QuestionDatabaseITA();
+				QuestionDatabase database= QuestionDatabaseITA.loadDatabaseFromFile();
 				//
 				
 				String answerStr;

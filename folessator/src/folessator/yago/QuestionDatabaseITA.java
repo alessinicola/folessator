@@ -1,5 +1,8 @@
 package folessator.yago;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import java.util.*;
@@ -62,6 +65,22 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 
 	private static final long serialVersionUID = 1L;
 	private HashMap<String,String> questionMap = new HashMap<String, String>();
+	
+	public static QuestionDatabaseITA loadDatabaseFromFile() {
+		try {
+			ObjectInputStream ois=new ObjectInputStream(new FileInputStream("db.bat"));
+			QuestionDatabaseITA db=(QuestionDatabaseITA)ois.readObject();
+			ois.close();
+			return db;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	@Override
 	public  String getQuestion(String topic) {
