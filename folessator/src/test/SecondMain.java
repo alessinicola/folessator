@@ -15,7 +15,7 @@ public class SecondMain {
 	
 	static public void main(String...argv) {
 	String category, question;
-	//QuestionDatabaseITA db = new QuestionDatabaseITA();
+//	QuestionDatabaseITA db = new QuestionDatabaseITA();
 	
 	ObjectInputStream ois=null;
 	try {
@@ -54,7 +54,7 @@ public class SecondMain {
 	ObjectOutputStream output = null;
 	
 	try {
-		output = new ObjectOutputStream(new FileOutputStream("db.bat"));
+		output = new ObjectOutputStream(new FileOutputStream("C:/Users/Daniele/git/folessator/folessator/db.bat"));
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -65,8 +65,8 @@ public class SecondMain {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	db.getLabel("http://yago-knowledge.org/resource/wordnet_defender_109614684");
-	//db.stampa();	
+	//db.getLabel("http://yago-knowledge.org/resource/wordnet_defender_109614684");
+	db.stampa();	
 }
 	
 }

@@ -1,6 +1,7 @@
 package folessator.yago;
 
 import java.io.Serializable;
+
 import java.util.*;
 import org.apache.jena.query.*;
 
@@ -62,18 +63,16 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 	private static final long serialVersionUID = 1L;
 	private HashMap<String,String> questionMap = new HashMap<String, String>();
 	
-	
 	@Override
 	public  String getQuestion(String topic) {
-
 		String label;
 		if (questionMap.containsKey(topic))
 			return questionMap.get(topic);
 		
 		if ((label=getLabel(topic))!=null)
-			return label;
+			return "is your character a " + label + "?";
 		
-		return getTag(topic);
+		return "does your character have something to do with "+getTag(topic) + "?";
 	}
 	
 	private String getTag(String topic) {
@@ -87,9 +86,9 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 		result=result.trim();
 		
 		if(haveGuess)
-			result="Ho capito! Stai parlando di "+result+"?";
+			result="I got it! are you thinking of "+result+"?";
 		
-		System.out.println("result" + result +" topic" +topic);
+		//System.out.println("result" + result +" topic" +topic);
 		return result;
 	}
 	
@@ -99,7 +98,7 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 		"select distinct ?LABEL "
 				+"{ "
 				+"<"+ topic +"> ?a ?LABEL ."
-				+"FILTER (lang(?LABEL) = 'ita')"
+				+"FILTER (lang(?LABEL) = 'eng')"
 				+ "}";
 		System.out.println(queryForLabel);
 		Query query = QueryFactory.create(QUERY_PREFIX+queryForLabel);
@@ -111,7 +110,7 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 	            List<String> queryResults=new ArrayList<String>();
 	    		while (rs.hasNext()) {
 	    			QuerySolution soln = rs.nextSolution();
-	                String label=soln.get( "LABEL" ).toString().replaceAll("@ita$", "");            
+	                String label=soln.get( "LABEL" ).toString().replaceAll("@eng$", "");            
 	    			queryResults.add(label);
 	                System.out.println(label);
 	    		}
@@ -119,7 +118,7 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 	    		if(queryResults.size()>=1)
 	    			result=queryResults.get(0);
 	    		if(queryResults.size()>=2)
-	    			result=result+" o " + queryResults.get(1);	            
+	    			result=result+" or a " + queryResults.get(1);	            
 	            
         	}
 	   catch (Exception e) 	
@@ -132,7 +131,7 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 
 	public void stampa() {
 		for (String topic : questionMap.keySet()) {
-			System.out.println("" + getTag(topic)  + " " + questionMap.get(topic));
+			System.out.println("" + topic  + " " + questionMap.get(topic));
 			
 		}
 	}
