@@ -11,7 +11,7 @@ public class PartitaSPARQL implements Partita {
 	
 
 	private Map<String, Answer> answers = new LinkedHashMap<>();
-	private static final String serverAddress="https://linkeddata1.calcul.u-psud.fr/sparql";
+	public static final String serverAddress="https://linkeddata1.calcul.u-psud.fr/sparql";
 	
 	@Override
 	public String getNextTopic() {	
@@ -51,7 +51,7 @@ public class PartitaSPARQL implements Partita {
 		}
 		
 	/*SPARQL QUERIES*/
-	private static final String QUERY_PREFIX=""+
+	public static final String QUERY_PREFIX=""+
 			"	PREFIX bif: <bif:>\n" + 
 			"	PREFIX dawgt: <http://www.w3.org/2001/sw/DataAccess/tests/test-dawg#>\n" + 
 			"	PREFIX dbpedia: <http://dbpedia.org/resource/>\n" + 

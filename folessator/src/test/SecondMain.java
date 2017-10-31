@@ -3,15 +3,18 @@ package test;
 import java.io.*;
 //import java.util.Scanner;
 
-import folessator.yago.QuestionDatabaseITA;
+import folessator.QuestionDatabase;
+import folessator.yago.QuestionDatabaseENG;
 
 public class SecondMain {
 	
+	//private static final String QuestionDatabaseENG = null;
+
 	static public void main(String...argv) {
 	//String category, question;
 //	QuestionDatabaseITA db = new QuestionDatabaseITA();
 	
-	QuestionDatabaseITA db= QuestionDatabaseITA.loadDatabaseFromFile();
+	QuestionDatabase db= QuestionDatabase.loadDatabaseFromFile("ENG");
 	
 	
 //			
@@ -36,7 +39,7 @@ public class SecondMain {
 	
 	try {
 		//output = new ObjectOutputStream(new FileOutputStream("./src/folessator/yago/db.bat"));
-		output = new ObjectOutputStream(new FileOutputStream("db.bat"));
+		output = new ObjectOutputStream(new FileOutputStream("dbENG.bat"));
 		output.writeObject(db);
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
@@ -44,7 +47,7 @@ public class SecondMain {
 	}
 	
 	//db.getLabel("http://yago-knowledge.org/resource/wordnet_defender_109614684");
-	db.stampa();	
+	((QuestionDatabaseENG)db).stampa();	
 }
 
 	

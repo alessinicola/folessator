@@ -7,7 +7,7 @@ import folessator.Answer;
 import folessator.Partita;
 import folessator.QuestionDatabase;
 import folessator.yago.PartitaSPARQL;
-import folessator.yago.QuestionDatabaseITA;
+import folessator.yago.QuestionDatabaseENG;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -67,7 +67,7 @@ class GameThread implements Runnable {
 				
 				//TODO: introdurre pattern factory...
 				Partita partita= new PartitaSPARQL();
-				QuestionDatabase database= QuestionDatabaseITA.loadDatabaseFromFile();
+				QuestionDatabase database= QuestionDatabaseENG.loadDatabaseFromFile("ENG");
 				//
 				
 				String answerStr;
