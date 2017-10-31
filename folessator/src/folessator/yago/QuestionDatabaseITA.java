@@ -91,8 +91,8 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 		if ((label=getLabel(topic))!=null)
 			return "is your character a " + label + "?";
 		
-		return "does your character have something to do with "+getTag(topic) + "?";
-	}
+			return getTag(topic);
+		}
 	
 	private String getTag(String topic) {
 		String result=topic;
@@ -106,6 +106,8 @@ public class QuestionDatabaseITA implements Serializable, QuestionDatabase {
 		
 		if(haveGuess)
 			result="I got it! are you thinking of "+result+"?";
+		else
+			result="Does your character have something to do with +" + result + "?";
 		
 		//System.out.println("result" + result +" topic" +topic);
 		return result;
