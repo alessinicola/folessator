@@ -64,15 +64,19 @@ class GameThread implements Runnable {
 				OutputStream output = clientSocket.getOutputStream();
 				DataOutputStream outToClient = new DataOutputStream(clientSocket.getOutputStream());
 				DataInputStream inFromClient = new DataInputStream(clientSocket.getInputStream());
-				
-				//TODO: introdurre pattern factory...
-				Partita partita= new PartitaSPARQL();
-				QuestionDatabase database= QuestionDatabaseENG.loadDatabaseFromFile("ENG");
-				//
-				
 				String answerStr;
 				String question = null;
 				String topic = "";
+				String language= inFromClient.readUTF();
+				
+				//TODO: introdurre pattern factory...
+				Partita partita= new PartitaSPARQL();
+				//
+				
+				QuestionDatabase database= QuestionDatabaseENG.loadDatabaseFromFile(language);
+				
+				
+				
 				
 				Answer answer= Answer.UNKNOWN;
 				while(  (answer!= Answer.ABORT && !topic.contains("GUESS")) || 

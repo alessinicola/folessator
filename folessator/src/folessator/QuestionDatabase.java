@@ -6,7 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import folessator.yago.QuestionDatabaseENG;
 
 public abstract class QuestionDatabase implements Serializable{
 

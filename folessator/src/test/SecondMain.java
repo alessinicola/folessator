@@ -5,6 +5,7 @@ import java.io.*;
 
 import folessator.QuestionDatabase;
 import folessator.yago.QuestionDatabaseENG;
+import folessator.yago.QuestionDatabaseITA;
 
 public class SecondMain {
 	
@@ -12,9 +13,9 @@ public class SecondMain {
 
 	static public void main(String...argv) {
 	//String category, question;
-//	QuestionDatabaseITA db = new QuestionDatabaseITA();
+	QuestionDatabaseITA db = new QuestionDatabaseITA();
 	
-	QuestionDatabase db= QuestionDatabase.loadDatabaseFromFile("ENG");
+	//QuestionDatabase db= QuestionDatabase.loadDatabaseFromFile("ENG");
 	
 	
 //			
@@ -39,7 +40,7 @@ public class SecondMain {
 	
 	try {
 		//output = new ObjectOutputStream(new FileOutputStream("./src/folessator/yago/db.bat"));
-		output = new ObjectOutputStream(new FileOutputStream("dbENG.bat"));
+		output = new ObjectOutputStream(new FileOutputStream("dbITA.bat"));
 		output.writeObject(db);
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
@@ -47,7 +48,7 @@ public class SecondMain {
 	}
 	
 	//db.getLabel("http://yago-knowledge.org/resource/wordnet_defender_109614684");
-	((QuestionDatabaseENG)db).stampa();	
+	//((QuestionDatabaseENG)db).stampa();	
 }
 
 	

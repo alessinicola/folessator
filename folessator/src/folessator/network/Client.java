@@ -17,6 +17,11 @@ public class Client {
 		String serverLine;
 		String question;
 		String answer;
+		String language;
+		print("Language? (eng-ita)");
+		language=getLanguage();
+		
+		outToServer.writeUTF(language);
 		
 		while(inFromServer.readBoolean())
 		{
@@ -45,6 +50,18 @@ public class Client {
 								result.equalsIgnoreCase("no")  ||
 								result.equalsIgnoreCase("maybe") ||
 								result.equalsIgnoreCase("abort") 								
+								));
+		
+		
+		return result; 
+	}
+	
+	private static String getLanguage() throws IOException {
+		String result=null;
+		
+		while((result=inFromUser.readLine())==null ||
+							  !(result.equalsIgnoreCase("ITA") ||
+								result.equalsIgnoreCase("ENG") 
 								));
 		
 		
