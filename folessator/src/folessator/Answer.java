@@ -4,7 +4,7 @@ public enum Answer {
 	YES, NO, MAYBE,ABORT,UNKNOWN;
 	
 	public static Answer convert(String str) {
-		str=str.toLowerCase();
+		str=str.toLowerCase().trim();
 		switch (str) {
 		case "yes":
 			return YES;

@@ -18,21 +18,22 @@ public class Client {
 		String question;
 		String answer;
 		String language;
-		print("Language? (eng-ita)");
+		print("In che lingua vuoi giocare? Scegli tra ita e eng");
 		language=getLanguage();
 		
-		outToServer.writeUTF(language);
+		NetworkTool.writeUTF8(language, outToServer);
 		
-		while(inFromServer.readBoolean())
+		while(NetworkTool.readBoolean(inFromServer))
 		{
-			question=inFromServer.readUTF();
+			question=NetworkTool.readUTF8(inFromServer);
 			
 			print(question);
 			answer=getAnswer();
 			
-			outToServer.writeUTF(answer);
+			NetworkTool.writeUTF8(answer, outToServer);
 		}
-		serverLine=inFromServer.readUTF();
+		serverLine=NetworkTool.readUTF8(inFromServer);
+				
 		print(serverLine);				
 		clientSocket.close();
 	}
@@ -60,8 +61,8 @@ public class Client {
 		String result=null;
 		
 		while((result=inFromUser.readLine())==null ||
-							  !(result.equalsIgnoreCase("ITA") ||
-								result.equalsIgnoreCase("ENG") 
+							  !(result.equalsIgnoreCase("ENG") ||
+								result.equalsIgnoreCase("ITA") 
 								));
 		
 		

@@ -9,11 +9,7 @@ import folessator.QuestionDatabase;
 import folessator.yago.PartitaSPARQL;
 import folessator.yago.QuestionDatabaseENG;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 public class Engine {
 
@@ -67,7 +63,8 @@ class GameThread implements Runnable {
 				String answerStr;
 				String question = null;
 				String topic = "";
-				String language= inFromClient.readUTF();
+				
+				String language=NetworkTool.readUTF8(inFromClient);
 				
 				//TODO: introdurre pattern factory...
 				Partita partita= new PartitaSPARQL();
@@ -75,26 +72,24 @@ class GameThread implements Runnable {
 				
 				QuestionDatabase database= QuestionDatabaseENG.loadDatabaseFromFile(language);
 				
-				
-				
-				
 				Answer answer= Answer.UNKNOWN;
 				while(  (answer!= Answer.ABORT && !topic.contains("GUESS")) || 
 						(topic.contains("GUESS") && answer== Answer.NO) ) 
 					{					
-					outToClient.writeBoolean(true);
+					NetworkTool.writeBoolean(true, outToClient);
 					
 					topic= partita.getNextTopic();
 					question= database.getQuestion(topic);						
 					
-					outToClient.writeUTF(question);					
-					answerStr=inFromClient.readUTF();
+					NetworkTool.writeUTF8(question, outToClient);
+					
+					answerStr=NetworkTool.readUTF8(inFromClient);
 					answer=Answer.convert(answerStr);
 					
 					partita.setAnswer(topic, answer);
 					}
-				outToClient.writeBoolean(false);
-				outToClient.writeUTF("gameover");
+				NetworkTool.writeBoolean(false, outToClient);
+				NetworkTool.writeUTF8("gameover", outToClient);
 				outToClient.close();
 				output.close();
 				input.close();				
@@ -106,4 +101,8 @@ class GameThread implements Runnable {
 				}
 			System.out.println("closing thread...");
 	}
+
+
+
+
 }
