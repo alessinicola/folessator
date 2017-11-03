@@ -69,7 +69,7 @@ public class QuestionDatabaseITA extends QuestionDatabase {
 		   	e.printStackTrace();
         	}		
 		if (result!=null)
-			result= "il tuo personaggio è un " + result + "?";
+			result= "il tuo personaggio e' un " + result + "?";
 		
 		return result;
 	}

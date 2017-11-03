@@ -65,6 +65,7 @@ class GameThread implements Runnable {
 				String topic = "";
 				
 				String language=NetworkTool.readUTF8(inFromClient);
+				System.out.println("lingua:"+language);
 				
 				//TODO: introdurre pattern factory...
 				Partita partita= new PartitaSPARQL();

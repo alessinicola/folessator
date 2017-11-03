@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<package uuid="folessator_client-3a8193">
+ <names>
+  <name lang="en_US">Folessator_Client</name>
+ </names>
+ <supportedLanguages>
+  <language>it_IT</language>
+ </supportedLanguages>
+ <descriptionLanguages>
+  <language>en_US</language>
+  <language>it_IT</language>
+ </descriptionLanguages>
+ <contents>
+  <behaviorContent path="behavior_1">
+   <nature>interactive</nature>
+   <permissions/>
+  </behaviorContent>
+ </contents>
+</package>
