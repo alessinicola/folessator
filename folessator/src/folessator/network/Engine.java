@@ -6,8 +6,8 @@ import java.net.Socket;
 import folessator.Answer;
 import folessator.Partita;
 import folessator.QuestionDatabase;
-import folessator.yago.PartitaSPARQL;
-import folessator.yago.QuestionDatabaseENG;
+import folessator.sparql.PartitaSPARQL;
+import folessator.sparql.QuestionDatabaseENG;
 
 import java.io.*;
 
@@ -69,6 +69,7 @@ class GameThread implements Runnable {
 				
 				//TODO: introdurre pattern factory...
 				Partita partita= new PartitaSPARQL();
+				
 				//
 				
 				QuestionDatabase database= QuestionDatabaseENG.loadDatabaseFromFile(language);
@@ -80,7 +81,7 @@ class GameThread implements Runnable {
 					NetworkTool.writeBoolean(true, outToClient);
 					
 					topic= partita.getNextTopic();
-					question= database.getQuestion(topic);						
+					question= database.getQuestion(topic,partita.getEndpoint());						
 					
 					NetworkTool.writeUTF8(question, outToClient);
 					

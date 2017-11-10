@@ -4,8 +4,8 @@ import java.io.*;
 //import java.util.Scanner;
 
 import folessator.QuestionDatabase;
-import folessator.yago.QuestionDatabaseENG;
-import folessator.yago.QuestionDatabaseITA;
+import folessator.sparql.QuestionDatabaseENG;
+import folessator.sparql.QuestionDatabaseITA;
 
 public class SecondMain {
 	
@@ -33,19 +33,18 @@ public class SecondMain {
 //	reader.close();
 	
 	
-	
 
 
-	ObjectOutputStream output = null;
-	
-	try {
-		//output = new ObjectOutputStream(new FileOutputStream("./src/folessator/yago/db.bat"));
-		output = new ObjectOutputStream(new FileOutputStream("dbITA.bat"));
-		output.writeObject(db);
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+//	ObjectOutputStream output = null;
+//	
+//	try {
+//		//output = new ObjectOutputStream(new FileOutputStream("./src/folessator/yago/db.bat"));
+//		output = new ObjectOutputStream(new FileOutputStream("dbITA.bat"));
+//		output.writeObject(db);
+//	} catch (IOException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
 	
 	//db.getLabel("http://yago-knowledge.org/resource/wordnet_defender_109614684");
 	//((QuestionDatabaseENG)db).stampa();	

@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import folessator.sparql.endpoints.SparqlEndpoint;
+
 
 public abstract class QuestionDatabase implements Serializable{
 
@@ -13,12 +15,12 @@ public abstract class QuestionDatabase implements Serializable{
 	private static final long serialVersionUID = 1L;
 	protected HashMap<String,String> questionMap = new HashMap<String, String>();
 
-	public  String getQuestion(String topic) {
+	public  String getQuestion(String topic,SparqlEndpoint sparqlEndpoint) {
 		String label;
 		if (questionMap.containsKey(topic))
 			return questionMap.get(topic);
 		
-		if ((label=getLabel(topic))!=null)
+		if ((label=getLabel(topic,sparqlEndpoint))!=null)
 			return label;
 		
 		return getTag(topic);
@@ -43,7 +45,7 @@ public abstract class QuestionDatabase implements Serializable{
 		questionMap.put(topic, question);
 	}
 	
-	protected abstract String getLabel(String topic);
+	protected abstract String getLabel(String topic,SparqlEndpoint sparqlEndpoint);
 	protected abstract String getTag(String topic);
 	
 }

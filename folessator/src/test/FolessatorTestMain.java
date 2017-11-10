@@ -11,11 +11,11 @@ import org.apache.jena.query.ResultSet;
 
 import folessator.Answer;
 import folessator.Partita;
-import folessator.yago.PartitaSPARQL;
+import folessator.sparql.PartitaSPARQL;
 
 //import org.apache.jena.query.*;
 
-public class FolessatorMain {
+public class FolessatorTestMain {
 	
 	
 	

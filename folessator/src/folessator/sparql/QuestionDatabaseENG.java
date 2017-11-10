@@ -1,4 +1,4 @@
-package folessator.yago;
+package folessator.sparql;
 
 
 import java.io.Serializable;
@@ -7,6 +7,7 @@ import java.util.*;
 import org.apache.jena.query.*;
 
 import folessator.QuestionDatabase;
+import folessator.sparql.endpoints.SparqlEndpoint;
 
 public class QuestionDatabaseENG extends QuestionDatabase implements Serializable {
 	
@@ -21,7 +22,9 @@ public class QuestionDatabaseENG extends QuestionDatabase implements Serializabl
 		result=result.replaceAll("^.*\\/|[0-9]+$","");
 		result=result.replaceAll("wordnet_", "");
 		result=result.replaceAll("wikicat_", "");
+		result=result.replaceAll("Wikicat", "");
 		result=result.replaceAll("_", " ");
+		result=splitCamelCase(result);
 		result=result.trim();
 		
 		if(haveGuess)
@@ -29,22 +32,22 @@ public class QuestionDatabaseENG extends QuestionDatabase implements Serializabl
 		else
 			result="Does your character have something to do with " + result + "?";
 		
-		//System.out.println("result" + result +" topic" +topic);
 		return result;
 	}
 	
-	protected String getLabel(String topic) {
+	protected String getLabel(String topic,SparqlEndpoint sparqlEndpoint) {
 		String result=null;
 		String queryForLabel = "" + 
-		"select distinct ?LABEL "
-				+"{ "
-				+"<"+ topic +"> ?a ?LABEL ."
-				+"FILTER (lang(?LABEL) = 'eng')"
+		"select distinct ?LABEL \n"
+				+"where\n"
+				+"{ \n"
+				+"<"+ topic +"> ?a ?LABEL .\n"
+				+"FILTER (lang(?LABEL) = 'eng')\n"
 				+ "}";
 		System.out.println(queryForLabel);
-		Query query = QueryFactory.create(PartitaSPARQL.QUERY_PREFIX+queryForLabel);
+		Query query = QueryFactory.create(sparqlEndpoint.getQueryPrefix()+queryForLabel);
 				
-        try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(PartitaSPARQL.serverAddress, query) )
+        try ( QueryExecution qexec = QueryExecutionFactory.sparqlService(sparqlEndpoint.getServerAddress(), query) )
         	{
         		ResultSet rs = qexec.execSelect();
 	            
@@ -79,7 +82,16 @@ public class QuestionDatabaseENG extends QuestionDatabase implements Serializabl
 		}
 	}
 
-	
+	private static String splitCamelCase(String s) {
+		   return s.replaceAll(
+		      String.format("%s|%s|%s",
+		         "(?<=[A-Z])(?=[A-Z][a-z])",
+		         "(?<=[^A-Z])(?=[A-Z])",
+		         "(?<=[A-Za-z])(?=[^A-Za-z])"
+		      ),
+		      " "
+		   );
+		}
 	
 
 }
