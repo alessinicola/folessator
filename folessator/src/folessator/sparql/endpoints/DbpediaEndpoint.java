@@ -13,7 +13,7 @@ public class DbpediaEndpoint implements SparqlEndpoint {
 	}
 
 	@Override
-	public String getPersonCategory() {
+	public String getPersonTopic() {
 		return "yago:Person100007846";
 	}
 
@@ -23,8 +23,8 @@ public class DbpediaEndpoint implements SparqlEndpoint {
 	}
 
 	@Override
-	public boolean isCategoryInvalid(String category) {
-		return !category.contains("yago");
+	public boolean isTopicInvalid(String topic) {
+		return !topic.contains("yago");
 	}
 
 }

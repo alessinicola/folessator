@@ -110,7 +110,7 @@ public class PartitaSPARQL implements Partita {
 		String queryStr =     		
 					"select (count (?URI) as ?TOTAL) \n" + 
 					"where {\n" + 
-					"?URI rdf:type "+sparqlEndpoint.getPersonCategory()+" .\n" + 					
+					"?URI rdf:type "+sparqlEndpoint.getPersonTopic()+" .\n" + 					
 					filters +
 					"\n}\n";
 		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());	
@@ -138,7 +138,7 @@ public class PartitaSPARQL implements Partita {
 		String queryStr = ""+				
 				"select ?categoria (count(?categoria) as ?TOTAL) (abs(count(?categoria)/"+TOTAL+".0 - 0.5) as ?DISTANCE) \n" + 
 				"where {\n" + 
-				"?URI rdf:type "+sparqlEndpoint.getPersonCategory()+" .\n" + 
+				"?URI rdf:type "+sparqlEndpoint.getPersonTopic()+" .\n" + 
 				"?URI rdf:type ?categoria .\n" + 
 				filters + 
 				"}\n" + 
@@ -158,7 +158,7 @@ public class PartitaSPARQL implements Partita {
             Answer answer=Answer.MAYBE;
             //ResultSetFormatter.out(System.out, rs, query);         
           
-            while(answer==Answer.MAYBE||sparqlEndpoint.isCategoryInvalid(categoria))
+            while(answer==Answer.MAYBE||sparqlEndpoint.isTopicInvalid(categoria))
             {
             qs=rs.next();
             categoria=qs.get( "categoria" ).toString();            
@@ -179,7 +179,7 @@ public class PartitaSPARQL implements Partita {
 		String queryStr=
 				"select ?URI\n" + 				
 				"where {\n" + 
-				"?URI rdf:type "+sparqlEndpoint.getPersonCategory()+" . \n" + 
+				"?URI rdf:type "+sparqlEndpoint.getPersonTopic()+" . \n" + 
 				filters+
 				"}\n" + 
 				"LIMIT 100";

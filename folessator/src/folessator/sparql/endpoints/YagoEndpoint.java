@@ -58,7 +58,7 @@ public class YagoEndpoint implements SparqlEndpoint{
 	}
 
 	@Override
-	public String getPersonCategory() {
+	public String getPersonTopic() {
 		return "yago:wordnet_person_100007846";
 	}
 
@@ -68,7 +68,7 @@ public class YagoEndpoint implements SparqlEndpoint{
 	}
 
 	@Override
-	public boolean isCategoryInvalid(String category) {
+	public boolean isTopicInvalid(String topic) {
 		return true;
 	}
 
